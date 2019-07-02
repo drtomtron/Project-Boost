@@ -5,6 +5,9 @@ TagManager:
   serializedVersion: 2
   tags:
   - Shootable
+  - Ground
+  - Safe
+  - Goal
   layers:
   - Default
   - TransparentFX

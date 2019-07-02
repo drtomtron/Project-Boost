@@ -47,7 +47,7 @@ GameObject:
   - component: {fileID: 620339277053508841}
   m_Layer: 0
   m_Name: Rocket Ship
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -220,9 +220,9 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 0}
-  m_PlayOnAwake: 1
-  m_Volume: 1
+  m_audioClip: {fileID: 8300000, guid: 388e6c684015a3045aa25dea38e9bff1, type: 3}
+  m_PlayOnAwake: 0
+  m_Volume: 0.326
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -318,10 +318,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d2c3498e011b59d4a867bd9ac0cbe4c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rocketThrust: 150
-  delay: 3
+  mainThrust: 60
+  rcsThrust: 80
   hasExploded: 0
   explosionEffect: {fileID: 1121192042590650, guid: e1b08032bec16ba4eb1ae23cbd572664,
+    type: 3}
+  levelComplete: 0
+  levelCompleteMusic: {fileID: 810082955846230910, guid: 4cdd1921b8b39bd449f129fa949af74a,
     type: 3}
 --- !u!1 &3554975474009971803
 GameObject:
@@ -519,8 +522,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4392295949011878544}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.30558884, y: 1.2673132, z: -3.9494255}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: -0.30558884, y: 1.79, z: -3.9494255}
+  m_LocalScale: {x: 1, y: 1.6003, z: 1}
   m_Children: []
   m_Father: {fileID: 3414524844935657058}
   m_RootOrder: 0
@@ -688,7 +691,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9053749922128890714}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.30558884, y: 2.2243133, z: -3.9494255}
+  m_LocalPosition: {x: -0.30558884, y: 3.36, z: -3.9494255}
   m_LocalScale: {x: 0.97236, y: 0.97236, z: 0.97236}
   m_Children: []
   m_Father: {fileID: 3414524844935657058}

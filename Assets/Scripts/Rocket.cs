@@ -7,22 +7,28 @@ public class Rocket : MonoBehaviour
 {
     Rigidbody rigidBody;
     AudioSource audioSource;
-    AudioSource explosionSFX;
-    public int rocketThrust = 50;
+    [SerializeField] float mainThrust = 60f;
+    float rotationSpeed;
+    [SerializeField] float rcsThrust = 80f;
+    public bool flightEnabled = true;
 
-    public float delay = 3f;
+    public float horizontalValue;
+
     float explodeTime = 2f;
-    float countdown;
     public bool hasExploded = false;
     public GameObject explosionEffect;
+
+    public bool levelComplete = false;
+    public GameObject levelCompleteMusic;
+    public Quaternion rocketCurrentRotation;
+    public GameObject landingRotation;
+    public Quaternion rocketEndRotation;
 
     // Start is called before the first frame update
     void Start()
     {
         rigidBody = GetComponent<Rigidbody>();
         audioSource = GetComponent<AudioSource>();
-        explosionSFX = GetComponent<AudioSource>();
-        countdown = delay;
     }
 
     // Update is called once per frame
@@ -30,21 +36,22 @@ public class Rocket : MonoBehaviour
     {
         RocketThrust();
         RocketRotation();
-        Countdown();
     }
 
     private void RocketThrust()
     {
-        if (Input.GetKey(KeyCode.Space))
+        float thrustPerFrame = mainThrust * Time.deltaTime;
+
+        if (flightEnabled && Input.GetKey(KeyCode.Space) || flightEnabled && Input.GetButton("Fire1"))
         {
-            rigidBody.AddRelativeForce(Vector3.up);
+            rigidBody.AddRelativeForce(Vector3.up * thrustPerFrame);
             if (!audioSource.isPlaying)
             {
                 audioSource.Play();
             }
         }
 
-        if (Input.GetKeyUp(KeyCode.Space))
+        if (Input.GetKeyUp(KeyCode.Space) || Input.GetButtonUp("Fire1"))
         {
             audioSource.Stop();
         }
@@ -52,28 +59,52 @@ public class Rocket : MonoBehaviour
 
     private void RocketRotation()
     {
+        horizontalValue = Input.GetAxis("Horizontal");
+        rotationSpeed = rcsThrust * Time.deltaTime;
+
         rigidBody.freezeRotation = true; // take manual control of rotation
 
-        if (Input.GetKey(KeyCode.A))
+        if (flightEnabled && Input.GetKey(KeyCode.A) || flightEnabled && horizontalValue < 0f)
         {
-            transform.Rotate(Vector3.forward * Time.deltaTime * rocketThrust);
+            transform.Rotate(Vector3.forward * rotationSpeed);
         }
-        else if (Input.GetKey(KeyCode.D))
+        else if (flightEnabled && Input.GetKey(KeyCode.D) || flightEnabled && horizontalValue > 0f)
         {
-            transform.Rotate(-Vector3.forward * Time.deltaTime * rocketThrust);
+            transform.Rotate(-Vector3.forward * rotationSpeed);
         }
 
         rigidBody.freezeRotation = false; //resume physics control of rotation
     }
 
-    void Countdown()
+    private void OnCollisionEnter(Collision col)
     {
-        countdown -= Time.deltaTime;
-
-        if (countdown <= 0f && !hasExploded)
+        switch (col.gameObject.tag)
         {
-            Explode();
-            hasExploded = true;
+            case "Safe":
+                print("Safe!");
+                break;
+
+            case "Goal":
+                CompletedLevel();
+                flightEnabled = false;
+                break;
+
+            default:
+                Explode();
+                break;
+        }
+    }
+
+    void CompletedLevel()
+    {
+        rocketCurrentRotation = transform.rotation;
+        rocketEndRotation = landingRotation.transform.rotation;
+
+        if (!levelComplete)
+        {
+            levelCompleteMusic = Instantiate(levelCompleteMusic, transform.position, transform.rotation);
+            levelComplete = true;
+            transform.rotation = Quaternion.Lerp(rocketCurrentRotation, rocketEndRotation, 0.8f);
         }
     }
 
@@ -81,11 +112,6 @@ public class Rocket : MonoBehaviour
     {
         //Show effect
         explosionEffect = Instantiate(explosionEffect, transform.position, transform.rotation);
-        //Play SFX
-        explosionSFX.Play();
-        //Get nearby objects
-        //Add force
-        //Damage
 
         Destroy(gameObject);
         Destroy(explosionEffect, explodeTime);
