@@ -320,11 +320,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mainThrust: 60
   rcsThrust: 80
+  flightEnabled: 1
+  horizontalValue: 0
   hasExploded: 0
   explosionEffect: {fileID: 1121192042590650, guid: e1b08032bec16ba4eb1ae23cbd572664,
     type: 3}
   levelComplete: 0
   levelCompleteMusic: {fileID: 810082955846230910, guid: 4cdd1921b8b39bd449f129fa949af74a,
+    type: 3}
+  rocketCurrentRotation: {x: 0, y: 0, z: 0, w: 0}
+  landingRotation: {fileID: 3368702439295393248, guid: c82b0af5425c52a48845aacc3d092de0,
+    type: 3}
+  rocketEndRotation: {x: 0, y: 0, z: 0, w: 0}
+  deathRestart: {fileID: 8378125223981548306, guid: 29ea2e1cc3477ac4f8bc4c3aa8b32f19,
     type: 3}
 --- !u!1 &3554975474009971803
 GameObject:

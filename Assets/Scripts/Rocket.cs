@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Rocket : MonoBehaviour
 {
@@ -23,6 +24,11 @@ public class Rocket : MonoBehaviour
     public Quaternion rocketCurrentRotation;
     public GameObject landingRotation;
     public Quaternion rocketEndRotation;
+
+    enum State {Alive, Dying, Transcending};
+    State state = State.Alive;
+
+    public GameObject deathRestart;
 
     // Start is called before the first frame update
     void Start()
@@ -81,15 +87,17 @@ public class Rocket : MonoBehaviour
         switch (col.gameObject.tag)
         {
             case "Safe":
-                print("Safe!");
                 break;
 
             case "Goal":
+                state = State.Transcending;
                 CompletedLevel();
                 flightEnabled = false;
                 break;
 
             default:
+                state = State.Dying;
+                Invoke("RestartLevel", 1.0f);
                 Explode();
                 break;
         }
@@ -112,7 +120,7 @@ public class Rocket : MonoBehaviour
     {
         //Show effect
         explosionEffect = Instantiate(explosionEffect, transform.position, transform.rotation);
-
+        Instantiate(deathRestart);
         Destroy(gameObject);
         Destroy(explosionEffect, explodeTime);
     }
